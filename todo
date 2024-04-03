@@ -1,2 +1,2 @@
-python -m pip freeze > requirements.txt
-add rule file flag
+python -m pip freeze > requirements.txt (done)
+add rule file flag (done)
