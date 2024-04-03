@@ -1,0 +1,7 @@
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"SQL Injection Attempt Detected"; flow:to_server,established; content:"' or '1'='1"; http_client_body; content:"--"; http_client_body; classtype:web-application-attack; sid:1000001; rev:1;)
+alert udp $HOME_NET any -> any 53 (msg:"DNS query for evil.com"; content:"|07|evil|03|com|00|"; offset:2; depth:11; sid:100003;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"Possible XSS Attack"; flow:established,to_client; content:"<script>"; nocase; http_client_body; content:"</script>"; nocase; within:100; classtype:web-application-attack; sid:1000001; rev:1;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"Possible Command Injection Attempt"; flow:established,to_server; content:"|3B|"; http_uri; content:"cmd="; http_uri; classtype:web-application-attack; sid:1000002; rev:1;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"Possible Directory Traversal Attempt"; flow:established,to_server; content:"../../"; http_uri; classtype:web-application-attack; sid:1000004; rev:1;)
+alert tcp $EXTERNAL_NET any -> $HOME_NET 80 (msg:"Possible Buffer Overflow Attempt"; flow:to_server,established; content:"AAAAAAAAAAAAAAAAAAAAAA"; depth:20; classtype:attempted-admin; sid:1000009; rev:1;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"Possible XML Injection Attempt"; flow:established,to_server; content:"<!ENTITY";content:"<![CDATA[" http_client_body; classtype:web-application-attack; sid:1000012; rev:1;)
